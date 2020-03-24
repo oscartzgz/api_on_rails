@@ -54,7 +54,7 @@ NOTE: El _modelo_ es el elemento que contiene la información o datos así como 
 
 ¡Este comando genera un montón de archivos! No te preocupes revisaremos uno por uno.
 
-El archivo de migración contenido en el forder `db/migrate` contiene la  *migración* que describe los cambios que realizará en la base de datos. Este archivo puede lucir así:
+El archivo de migración contenido en el directorio `db/migrate` contiene la  *migración* que describe los cambios se realizarán en la base de datos. Este archivo puede lucir así:
 
 .db/migrate/20190603195146_create_users.rb
 [source,ruby]
@@ -73,7 +73,7 @@ end
 
 NOTE: La fecha insertada al inicio del nombre del archivo de migración debiera ser diferente para ti ya que corresponde a la fecha de creación de la migración.
 
-Haremos un pequeño cambio a la migración a fin de añadir algunas validaciones a la base de datos. Con rails es una práctica común hacer validaciones directamente en el modelo Ruby. Es buena práctica hacer algo en el esquema de la base de datos.
+Haremos un pequeño cambio a la migración a fin de añadir algunas validaciones a la base de datos. Con rails es una práctica común hacer validaciones directamente en el modelo Ruby. Pero es buena práctica hacelo también en el esquema de la base de datos.
 
 Por lo tanto haremos dos restricciones adicionales:
 
@@ -107,7 +107,7 @@ $ rake db:migrate
 == 20190603195146 CreateUsers: migrated (0.0028s) =============================
 ----
 
-NOTE: Este comando convertirá nuestra migración en una consulta SQL que actualizara la base de datos SQLite3 almacenada en el folder _db_.
+NOTE: Este comando convertirá nuestra migración en una consulta SQL que actualizará la base de datos SQLite3 almacenada en el folder _db_.
 
 ==== Modelo
 
@@ -131,7 +131,7 @@ class User < ApplicationRecord
 end
 ----
 
-Ahí tienes. Rails una sintaxis simple y el código es muy legible.
+Ahí tienes. Rails con una sintaxis simple y el código es muy legible.
 
 .Validación del Email
 ****
@@ -139,19 +139,19 @@ Habrás notado que la validación del email es muy simplista solo validando la p
 
 Es normal.
 
-Hay infinidad de excepciones en la dirección de un correo electrónico https://davidcel.is/posts/stop-validating-email-addresses-with-regex/[que incluso `Mira todos estos espacios!@example.com` es una dirección de correo valida]. Por lo tanto, es mejor para favorecer un enfoque sencillo y confirmar la dirección de correo enviando un email.
+Hay infinidad de excepciones en la dirección de un correo electrónico https://davidcel.is/posts/stop-validating-email-addresses-with-regex/[que incluso `Mira todos estos espacios!@example.com` es una dirección de correo valida]. Por lo tanto, es mejor para favorecer un enfoque sencillo y será mejor confirmar la dirección de correo enviando un email.
 ****
 
 ==== Pruebas unitarias
 
 Finalizamos con las pruebas unitarias. Aquí usaremos Minitest un framework de pruebas que es proporcionado por defecto con Rails.
 
-Minitest está basado en _Fixtures_ que te permiten llenar tu base de datos con datos predefinidos*. Los _Fixtures_ están definidos en un archivo YAML en el directorio `tests/fixtures`. Hay un archivo por plantilla.
+Minitest está basado en _Fixtures_ que te permiten llenar tu base de datos con datos *predefinidos*. Los _Fixtures_ están definidos en un archivo YAML en el directorio `tests/fixtures`. Hay un archivo por plantilla.
 
 
 Debemos por lo tanto iniciar actualizando nuestros `tests/fixtures`.
 
-NOTE: _fixtures_ no están diseñados para crear todas los datos que tus pruebas necesitan.  Solo te permiten definir los datos básicos que tu aplicación necesita.
+NOTE: Los _fixtures_ no están diseñados para crear todos los datos que tus pruebas necesitan.  Solo te permiten definir los datos básicos que tu aplicación necesita.
 
 Así que comenzamos por crear un _fixture_ definiendo un usuario:
 
@@ -189,7 +189,7 @@ test 'user with invalid email should be invalid' do
 end
 ----
 
-- 3. Verifica que un nuevo usuario con email no es válido. Así que usamos el mismo email que creamos en el _fixture_.
+- 3. Verifica que un nuevo usuario con email ya existente no es válido. Así que usamos el mismo email que creamos en el _fixture_.
 
 .test/models/user_test.rb
 [source,ruby]
@@ -222,9 +222,9 @@ $ git add . && git commit -m "Create user model"
 
 Previamente implementamos el almacenamiento de los datos del usuario. Pero seguimos teniendo un problema por resolver:  *el almacenamiento de la contraseña está en texto plano*.
 
-> Si almacenas la contraseña de los usuarios en texto plano, entonces un atacante que roba una copia de tu base de datos tiene una lista gigante de emails y contraseñas. Alguno de tus usuarios podría tener únicamente una contraseña -- para su cuenta de email, para sus cuentas de banco, para su aplicación. Un simple hackeo puede escalar en un robo masivo de identidad. - https://github.com/codahale/bcrypt-ruby#why-you-should-use-bcrypt[fuente - Porque deberías usar bcrypt(en inglés)]
+> Si almacenas la contraseña de los usuarios en texto plano, entonces un atacante que roba una copia de tu base de datos tiene una lista gigante de emails y contraseñas. Alguno de tus usuarios podría tener únicamente una contraseña -- para su cuenta de email, para sus cuentas de banco, para su aplicación. Así que un hackeo puede escalar en un robo masivo de identidad. - https://github.com/codahale/bcrypt-ruby#why-you-should-use-bcrypt[fuente - Porque deberías usar bcrypt(en inglés)]
 
-Así que vamos a usar la gema bcrypt para *hashear* la contraseña.
+Por lo tanto vamos a usar la gema bcrypt para *hashear* la contraseña.
 
 NOTE: Hashear es el proceso de transformar un arreglo de caracteres en un _Hash_. Este _Hash_ no te permite encontrar el arreglo de caracteres original. Pero como sea, podemos fácilmente usarlo para encontrar si un arreglo de caracteres dado coincide con el _hash_ que almacenamos.
 
@@ -556,7 +556,7 @@ class Api::V1::UsersControllerTest < ActionDispatch::IntegrationTest
 end
 ----
 
-Para que la prueba se exitosa, debemos construir la acción update en el archivo `users_controller.rb` y agregar la ruta al archivo `routes.rb`. Como puedes ver, tenemos mucho código duplicado, vamos a rediseñar nuestra prueba en el capítulo 4. Primero añadimos la acción al archivo `routes.rb`:
+Para que la prueba sea exitosa, debemos construir la acción update en el archivo `users_controller.rb` y agregar la ruta al archivo `routes.rb`. Como puedes ver, tenemos mucho código duplicado, vamos a rediseñar nuestra prueba en el capítulo 4. Primero añadimos la acción al archivo `routes.rb`:
 
 [source,ruby]
 .config/routes.rb
